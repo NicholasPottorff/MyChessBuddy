@@ -7,7 +7,7 @@ STALEMATE = 0
 DEPTH = 2
 
 #Aggressive Bias can be set to -1 for defensive, 0 for neutral, and 1 for aggressive
-AGGRESSIVE_BIAS = 1
+AGGRESSIVE_BIAS = 0
 
 
 def findRandomMove(valid_moves):
@@ -19,6 +19,7 @@ def findBestMove(gs, valid_moves):
     opponent_minmax_score = CHECKMATE
     best_player_move = None
     random.shuffle(valid_moves)
+
     for player_move in valid_moves:
         gs.makeMove(player_move)
         opponents_moves = gs.getValidMoves()
@@ -69,6 +70,20 @@ def findMoveMinMax(gs, valid_moves, depth, white_to_move):
     global nextMove
     if depth == 0:
         return scoreBoard(gs)
+    random.shuffle(valid_moves)
+
+    if AGGRESSIVE_BIAS == -1: #defensive AI will not capture a piece unless it has no other choice
+        #print("attempting to be defensive")
+        for i in range(len(valid_moves) - 1, -1, -1):
+            if valid_moves[i].piece_captured != '--' and 1 < len(valid_moves):
+                valid_moves.remove(valid_moves[i])
+                #print("removed an aggressive move")
+    elif AGGRESSIVE_BIAS == 1:
+        #print("attempting to be aggressive")
+        for i in range(len(valid_moves) - 1, -1, -1):
+            if valid_moves[i].piece_captured == '--' and 1 < len(valid_moves):
+                valid_moves.remove(valid_moves[i])
+                #print("removed a non-aggressive move")
 
     if white_to_move:
         max_score = -CHECKMATE
@@ -134,3 +149,4 @@ def scoreBoard(gs):
                         score += pieceScore[square[1]]
 
     return score
+
