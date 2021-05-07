@@ -1,5 +1,5 @@
 import pygame as p
-from Chess import ChessBuddyEngine, SmartMoveFinder
+from Chess import ChessBuddyEngine, ChessBuddyMoveFinder
 
 WIDTH = HEIGHT = 512
 DIMENSION = 8
@@ -80,10 +80,10 @@ def main():
                     game_over = False
 
         if not game_over and not human_turn:
-            AI_move = SmartMoveFinder.findBestMoveMinMax(gs, valid_moves)
-            #AI_move = SmartMoveFinder.findBestMove(gs, valid_moves)
+            AI_move = ChessBuddyMoveFinder.findBestMoveMinMax(gs, valid_moves)
+            #AI_move = ChessBuddyMoveFinder.findBestMove(gs, valid_moves)
             if AI_move is None:
-                AI_move = SmartMoveFinder.findRandomMove(valid_moves)
+                AI_move = ChessBuddyMoveFinder.findRandomMove(valid_moves)
             gs.makeMove(AI_move)
             move_made = True
             animate = True
